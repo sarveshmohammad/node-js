@@ -1,61 +1,95 @@
-
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs')
+const db = require('../config');
+db();
+const mongodb = require('mongodb');
+const User = require('../Model/productModel');
 const asyncHandler = require('express-async-handler');
-const { Error } = require('mongoose');
-const users = require('../modals/productSchema')
 
 
-const getProduct = asyncHandler(async (req, res) => {
-    const data = await users.find();
-
-    res.status(200).json(data);
-
-})
-
-const setProduct = asyncHandler(async (req, res) => {
-    const { title, dis, price, quentity } = req.body;
-    if (!title && !dis && !price && !quentity) {
-        res.status(400)
-        throw new Error('plese add a all files')
-    }
-    const data = await users.create({
-        title: req.body.title,
-        dis: req.body.dis,
-        price: req.body.price,
-        quentity: req.body.quentity
+const getproduct = async (req, res) => {
+    let data = await User.findById();
+    console.log("======>",data);
+     res.status(201).json({
+        token: generateToken(User._id)
     })
-    res.status(200).json({ message: data });
+      
+}
+const addproduct = asyncHandler(async (req, res) => {
 
+    const { title, dis, price, quentity, Image } = req.body
+    if (!title || !dis || !price || !quentity || !Image) {
+        res.status(400)
+        throw new Error("please add all fields");
+    }
+    if(generateToken){
+    const data = await User.create({
+        title,
+        dis,
+        price,
+        quentity,
+        Image,
+    })
+}
+    res.json({
+        title,
+        dis,
+        price,
+        quentity,
+        Image,
+        token: generateToken(User._id)
+    })
 })
 
 
-const updateProduct = asyncHandler(async (req, res) => {
-    const fintId = await users.findById(req.params._id);
-    if (!fintId) {
-        res.status(400)
-        res.send('User Not Found');
+
+
+const updateproduct = asyncHandler(async (req, res) => {
+    let findid = await User.findById(req.params._id);
+    if (!findid) {
+        res.status(400);
+        res.send("user not found");
     }
-    const UpdateUser = await users.findByIdAndUpdate(req.params._id, req.body, {
+    if(generateToken){
+    const updateusers = await User.findByIdAndUpdate(req.params._id, req.body, {
         new: true
+    
     })
-    console.log("===> UpdateUser", UpdateUser);
-    res.status(200).json({ message: `upadatedata ${req.params._id}` });
-
+    console.log("=====>", updateusers);
+    res.status(200).json({
+        token: generateToken({message: `data is update`})
+    })
+}
+   
+    
+   
 })
 
 
-const deleteProduct = asyncHandler(async (req, res) => {
-    const findId = await users.findById(req.params._id);
-    if (!findId) {
-        res.status(400)
-        res.send('User Not Found');
+
+const deleteproduct = asyncHandler(async (req, res) => {
+    let findid = await User.findById(req.params._id);
+    if (!findid) {
+        res.status(400);
+        res.send("user not found");
     }
-    await findId.remove();
-    res.status(200).json({ message: `delete data ${req.params._id}` });
+    if(generateToken){
+    await findid.remove();
+    }
 
+    res.status(200).json({ message: `delete data ${req.params._id}` });
 })
+
+
+
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, {
+        expiresIn: '30d',
+    })
+}
 module.exports = {
-    getProduct,
-    setProduct,
-    updateProduct,
-    deleteProduct,
+    getproduct, 
+    addproduct, 
+    updateproduct, 
+    deleteproduct
 }
