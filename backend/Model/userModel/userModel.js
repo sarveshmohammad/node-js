@@ -22,8 +22,6 @@ const userschema = new mongoose.Schema({
     product: {
         type: String
     }
-
-
 })
 
 module.exports = mongoose.model("newdataUser", userschema)

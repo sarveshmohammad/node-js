@@ -70,7 +70,4 @@ const deleteusre = async (req, res) => {
     }
 }
 
-
-
-
-module.exports = { getuser,findpost,postuser,deleteusre };
+module.exports = { getuser,postuser,findpost,deleteusre };
