@@ -39,6 +39,8 @@ app.use('/allApi/descboard',require('./routes/descboardrouters/descboardrouters'
 
 app.use('/api/UserData',require('./routes/UserRouters/UserRouters'))
 
+app.use('/api/addcard',require('./routes/addcardRouters'))
+
 
 const ConnectDB = require('./config/db')
 ConnectDB()
