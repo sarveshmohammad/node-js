@@ -1,87 +1,73 @@
-const employ = require("../../Model/employModel/employModel")
-const jwt = require("jsonwebtoken")
-const bcrypt = require('bcrypt')
-const { model } = require("mongoose")
+const employs = require('../../Model/employModel/employModel')
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
+const getemploy = async(req,res)=>{
+    let data = await employs.find({});
+    console.log("======>",data);
+    res.status(200).json({data})
 
-const getemploy = async (req,res)=>{
-    const data = await employ.find({})
-    res.send(data)
 }
 
-const employs = async (req,res)=>{
-    const data = await employ.findById(req.params._id)
-    res.send(data)
-
-    console.log(req.params._id);
-}
-
-const postemploy = async (req,res)=>{
-    const { employId , employName , employemail ,employNumber ,employDOB ,employMent ,employAddress} = req.body
-
-    let checkemail = employemail.includes("@gmail.com")
-    if (!checkemail) {
+const postemploy = async(req,res)=>{
+    const { employId, employName, employEmail, employNumber, employDob, employMent, employAddress } = req.body
+    let cheackemail = employEmail.includes("@gmail.com")
+    if(!cheackemail){
         res.status(400)
-        throw new Error("please add the @gmail.com")
+        throw new Error ("please add the @gmail.com")
     }
-
-    const data = await employ.create({
-        employId,
-        employName,
-        employemail,
-        employNumber,
-        employDOB,
-        employMent,
+    const data = await employs.create({
+        employId, 
+        employName, 
+        employEmail, 
+        employNumber, 
+        employDob, 
+        employMent, 
         employAddress
     })
-
-    res.status(201).json({
-        employId:data.employId,
-        employName:data.employName,
-        employemail:data.employemail,
-        employNumber:data.employNumber,
-        employDOB:data.employDOB,
-        employMent:data.employMent,
-        employAddress:data.employAddress,
-        token:generateToken(data._id)
-    })
+    res.status(201).json({data})
 }
 
-const updateemploy = async (req,res)=>{
-    let data = await employ.findById(req.params._id)
-    if(!data){
-    res.status(200).json({massage:"id is not define"})
-}
-let updatedata = await employ.findByIdAndUpdate(req.params._id,req.body,{
-    new:true
-})
-res.status(200).json(updatedata)
+const serchemploy = async(req,res)=>{
+    let data = await employs.findById(req.params._id);
+    console.log("=====================================>",req.params._id);
+    res.status(200).json(data);
  }
 
- const deleteemploy =async(req,res)=>{
-    const data = await employ.findById(req.params._id);
-    if(!data){
-        res.status(300).json({massage:"enter id"})
+ const updateemploy= async (req,res)=>{
+    let findid = await employs.findById(req.params._id);
+    if(!findid){
+        res.status(400);
+        res.send("user not found");
     }
-    await data.remove();
-    res.status(400).json({massage:"data is delete"})
+
+        const updateusers = await employs.findByIdAndUpdate(req.params._id,req.body,{
+            new : true
+    
+    })
+    res.send(updateusers)
+}
+
+const deleteemploy= async(req,res)=>{
+   
+    let findid = await employs.findById(req.params._id);
+    if(!findid){
+        res.status(400);
+        res.send("user not found");
+    }
+        await findid.remove();
+
+    res.status(200).json({message : `delete data ${req.params.id}`});
  }
 
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
-        expiresIn: '30d',
-    })
-}
+
+
 
 module.exports = {
-    employs,
     getemploy,
     postemploy,
+    serchemploy,
     updateemploy,
     deleteemploy
+
 }
-
-
-
-
-

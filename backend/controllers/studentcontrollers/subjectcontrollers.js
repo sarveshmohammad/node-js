@@ -1,36 +1,29 @@
 const { models } = require("mongoose")
-const { route } = require("../../routers/studentrouters/courserouters")
+const { route } = require("../../routers/studentrouters/subjectrouters")
 const { json } = require('express')
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const asyncHandler = require('express-async-handler');
-const User = require('../../Model/studentModel/courseModel');
+const User = require('../../Model/studentModel/subjectModel');
 const protect = require("../../Middleware/Authmiddleware");
-const { findById } = require("../../Model/userModel");
 
-const setcourse = asyncHandler(async(req,res)=>{
-    const { course } = req.body
-    let data = await User.create({course:req.body.course}); 
+const setsubject = asyncHandler(async(req,res)=>{
+    const { subjectName } = req.body
+    let data = await User.create({subjectName:req.body.subjectName}); 
     console.log("====>",data);
      res.status(200).json({data})
 
 })
 
-const getcourse = asyncHandler (async(req,res)=>{
+const getsubject = asyncHandler (async(req,res)=>{
     let data = await User.find();
     console.log("======>",data);
     res.status(200).json(data)
 
 })
 
-const searchcourse = asyncHandler(async(req,res)=>{
-    let data = await User.findById(req.params._id);
-    res.status(200).json(data);
- })
-
-
- const updatecourse=asyncHandler( async (req,res)=>{
+const updatesub=asyncHandler( async (req,res)=>{
     let findid = await User.findById(req.params._id);
     if(!findid){
         res.status(400);
@@ -44,7 +37,7 @@ const searchcourse = asyncHandler(async(req,res)=>{
     res.send(updateusers)
 })
 
-const deletecourse= asyncHandler( async(req,res)=>{
+const deletesub= asyncHandler( async(req,res)=>{
    
     let findid = await User.findById(req.params._id);
     if(!findid){
@@ -61,10 +54,8 @@ const deletecourse= asyncHandler( async(req,res)=>{
 
 
 module.exports = {
-    setcourse,
-    getcourse,
-    searchcourse,
-    updatecourse,
-    deletecourse
-    
+    setsubject,
+    getsubject,
+    updatesub,
+    deletesub
 }

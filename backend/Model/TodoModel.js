@@ -1,30 +1,41 @@
 const mongoose = require('mongoose');
-const todo = new mongoose.Schema({
-    FirstName: {
-        type:String,
-        required:[true,'Please add a name']
-       },
-       LastName: {
-        type:String,
-        required:[true,'Please add email']
-       },
-       Email: {
-        type:String,
-        required:[true,'Please add a password']
-       },
-       Phone :{
-        type:Number,
-        required:[true,'Please add a name']
-       },
-       PinCode: {
-        type:Number,
-        required:[true,'Please add email']
-       },
-       Address: {
-        type:String,
-        required:[true,'Please add a password']
-       },
+const todoSchema = new mongoose.Schema({
+    firstname:{
+        type :String,
+        required : [true, 'please add an firstname']
+    },
+    lastname:
+    {
+        type :String,
+        required : [true, 'please add an lastname']    
+    },
+    email:{
+        type :String,
+        required : [true, 'please add an email']    
+    },
+    phone:{
+        type :Number,
+        required : [true, 'please add an phone']    
+    },
+    pincode:{
+        type :Number,
+        required : [true, 'please add an pincode']    
+    },
+    address:{
+        type :String,
+        required : [true, 'please add an address']    
+    },
+    state:{
+        type :String,
+        required : [true, 'please add an state']    
+    },
 
-});
 
-module.exports = mongoose.model('todoS',todo);
+
+},
+{
+    timestamps : true
+ }
+);
+
+module.exports = mongoose.model('todo',todoSchema);

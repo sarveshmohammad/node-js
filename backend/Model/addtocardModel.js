@@ -1,15 +1,17 @@
 const mongoose = require('mongoose');
-const productSchema = new mongoose.Schema({
+const addtocard = new mongoose.Schema({
     title: {  type: String },
     dis: { type: String },
-    price: {type: Number},
+    price: {type: String},
     reting: {type: String},
     color: { type: String},
     img: {type: String},
-    size:{ type:String }
+    size:{ type:String },
+    quentity:{type:String},
+    user_id:{type:String}
 }, 
 {
     timestamps: true
 });
 
-module.exports = mongoose.model('Productfiles', productSchema);
+module.exports = mongoose.model('addtocard', addtocard);

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const studentAuthSchema = new mongoose.Schema({
+const studentSchema = new mongoose.Schema({
     name:{
         type :String,
         required : [true, 'please add an name']
@@ -13,11 +13,15 @@ const studentAuthSchema = new mongoose.Schema({
         type :String,
         required : [true, 'please add an password']    
     },
-    
+    number:{
+        type :String,
+        required : [true, 'please add an number']    
+    },
+
 },
 {
     timestamps : true
  }
 );
 
-module.exports = mongoose.model('userAuth ',studentAuthSchema);
+module.exports = mongoose.model('student',studentSchema);
